@@ -1437,3 +1437,6 @@ html[dir="rtl"] .err-code{text-align:right}
 }
 @media(max-width:700px){.hero-7 .confetti{display:none}}
 @media(max-width:700px){.buy-row .btn-primary{order:-1;flex:1 1 100%}.buy-row .qty{flex:1}}
+
+/* filled icons (was inline style) */
+.icon-fill{fill:currentColor!important;stroke:none!important}

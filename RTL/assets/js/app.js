@@ -261,12 +261,17 @@
   $$('[data-coupon]').forEach(function (f) {
     var input = $('input', f), msg = $('.coupon-msg', f.parentNode);
     if (getCoupon() && input) input.value = getCoupon();
-    on(f, 'submit', function (e) {
-      e.preventDefault(); var code = latin(input.value).trim().toUpperCase();
+    function apply(e) {
+      if (e) e.preventDefault(); var code = latin(input.value).trim().toUpperCase();
       if (COUPONS[code]) { save('coupon', code); msg.className = 'coupon-msg ok'; msg.textContent = T.couponOk; }
       else { save('coupon', ''); msg.className = 'coupon-msg bad'; msg.textContent = T.couponBad; }
       renderSummary();
-    });
+    }
+    if (f.tagName === 'FORM') on(f, 'submit', apply);
+    else {
+      on($('button', f), 'click', apply);
+      on(input, 'keydown', function (e) { if (e.key === 'Enter') apply(e); });
+    }
   });
   /* shipping radios */
   $$('input[name="shipping"]').forEach(function (r) {
@@ -281,7 +286,7 @@
     else if (p.d) badges += '<span class="p-badge off">' + digits(p.d) + '٪'.replace('٪', FA ? '٪' : '%') + '</span>';
     if (p.t === 'new') badges += '<span class="p-badge new">' + T.new + '</span>';
     if (p.t === 'hot') badges += '<span class="p-badge hot">' + T.hot + '</span>';
-    var sw = p.co.length ? '<div class="p-swatches" aria-label="' + T.colors + '">' + p.co.slice(0, 4).map(function (c) { return '<i style="--c:' + D.colors[c][1] + '" title="' + D.colors[c][0] + '"></i>'; }).join('') + '</div>' : '';
+    var sw = p.co.length ? '<div class="p-swatches" role="img" aria-label="' + T.colors + '">' + p.co.slice(0, 4).map(function (c) { return '<i style="--c:' + D.colors[c][1] + '" title="' + D.colors[c][0] + '"></i>'; }).join('') + '</div>' : '';
     return '<article class="p-card" data-tilt><a class="p-media" href="' + pUrl(p) + '" tabindex="-1" aria-hidden="true"><img src="' + pImg(p) + '" alt="" width="400" height="400" loading="lazy"><img class="img-2" src="' + pImg(p) + '" alt="" width="400" height="400" loading="lazy"></a>' +
       '<div class="p-badges">' + badges + '</div><div class="p-tools"><button type="button" class="p-tool" data-wish="' + p.id + '" aria-label="' + T.addWish + '" aria-pressed="false">' + icon('heart', 'icon-sm') + '</button><button type="button" class="p-tool" data-compare="' + p.id + '" aria-label="' + T.addCompare + '" aria-pressed="false">' + icon('compare', 'icon-sm') + '</button><a class="p-tool qv" href="' + pUrl(p) + '" aria-label="' + T.view + '">' + icon('eye', 'icon-sm') + '</a></div>' +
       '<div class="p-body"><span class="p-cat">' + esc(subName(p.s)) + '</span><h3 class="p-title"><a href="' + pUrl(p) + '">' + esc(p.n) + '</a></h3><span class="rating">' + star() + '<b>' + digits(p.r.toFixed(1)) + '</b> (' + digits(p.rc) + ')</span>' + sw + '<p class="p-desc">' + esc(T.cardDesc) + '</p>' +

@@ -1,30 +1,10 @@
-Bazarino — Multi-purpose HTML shop template
-=============================================
+Bazarino — Changelog
 
-v2.0 (2026-11-21)
------------------
-Major rebuild.
-- 8 distinct homepage designs (Marketplace, Fashion, Tech, Home & Kitchen, Beauty, Minimal, Kids & Toys, Grocery) sharing one design system.
-- Demo selector page (demo.html) with previews of all homepages and links to every inner page.
-- Full English LTR version (LTR folder) next to the Persian RTL version (RTL folder).
-- Catalog of 124 products in 12 categories / 32 subcategories; every product has its own static page
-  with gallery + zoom, color and size selectors, quantity, add to cart, wishlist, compare,
-  specifications, description, reviews with rating breakdown and review form, related products,
-  size guide modal for apparel and shoes, breadcrumbs.
-- Shop page with category tree, dual price range slider, brand / color / size filters, in-stock and
-  on-sale switches, sorting, grid / list view, pagination, active filter chips, mobile filter drawer and empty state.
-- Header with mega menu, live search suggestions, slide-out cart drawer, wishlist & compare counters,
-  mobile menu drawer and bottom navigation.
-- New pages: order success, order tracking, compare, wishlist, account (dashboard, orders, order detail,
-  addresses, profile, wishlist, sign out), login / register / forgot password in one page, categories, brands,
-  about, FAQ, terms, privacy, coming soon, 12 blog posts with table of contents and comments.
-- 3D look: perspective hero stages with mouse tilt and parallax, clay-style category icons, glass cards,
-  subtle 3D hover tilt on product cards (disabled for reduced motion and touch screens).
-- Checkout with validation (address, shipping method, payment method), coupon codes (BAZARINO10, WELCOME).
-- Accessibility: labels, ARIA tabs / dialogs / live regions, visible focus, keyboard support, reduced motion.
-- Dark mode, CSS variables for all brand colors, custom.css and custom.js for buyer overrides.
-- All images in WebP, Vazirmatn font served locally, no CDN, no external links, no jQuery.
+2.0.1
+- Fixed nested coupon form in checkout (RTL & LTR): Apply no longer submits the order form; Enter key applies the code.
+- Corrected ARIA roles (color swatches, rating stars, payment icons, checkout steps, sliders, search combobox). Zero W3C validator errors.
+- Moved inline SVG icon styles to a CSS class (.icon-fill).
+- New package structure: RTL / LTR / Docs, illustrated Persian (Help.pdf) and English (Help-en.pdf) guides.
 
-v1.1
-----
-- Initial public release (12 pages, 16 products).
+2.0.0
+- Initial release: 8 home demos, Persian (RTL) and English (LTR) versions, 124 product pages, 12 blog articles, dark mode.
