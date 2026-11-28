@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>سبد خرید و کش‌بک هوشمند ووکامرس | Smart Cart Cashback Demo</title>
+    <link rel="stylesheet" href="hark.css" />
+    <style>
+      @font-face { font-family: "Vazirmatn"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("vazirmatn-1.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC; }
+      @font-face { font-family: "Vazirmatn"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("vazirmatn-2.woff2") format("woff2"); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: "Vazirmatn"; font-style: normal; font-weight: 400 900; font-display: swap; src: url("vazirmatn-0.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+      :root {
+        --x-navy: #0b1a6b;
+        --x-royal: #2036c9;
+        --x-deep: #07114a;
+        --x-gold-1: #ffc53d;
+        --x-gold-2: #e08a00;
+        --x-gold-shadow: #9c5a00;
+        --x-line: rgba(150, 180, 255, 0.55);
+        --x-ink: #ffffff;
+        --x-ink-2: #c9d4ff;
+        --x-green: #22c55e;
+        --x-glass: linear-gradient(160deg, rgba(48, 76, 230, 0.55), rgba(16, 32, 140, 0.55));
+        --x-shadow: 0 18px 40px rgba(2, 8, 50, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        --x-max: 1180px;
+        --x-pad: clamp(16px, 4vw, 32px);
+        color-scheme: dark;
+      }
+      html { overflow-x: hidden; background-color: #0e1d78; }
+      main, .x-sec, .x-foot { background-color: transparent; }
+      body.x-body {
+        margin: 0;
+        font-family: "Vazirmatn", Tahoma, sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.9;
+        color: var(--x-ink);
+        background-color: #0e1d78;
+        background-image: linear-gradient(180deg, var(--x-deep) 0%, var(--x-navy) 40%, #12249a 75%, var(--x-deep) 100%);
+        overflow-x: hidden;
+      }
+      .x-body :focus-visible { outline: 2px solid var(--x-gold-1); outline-offset: 3px; }
+      .x-wrap { max-width: var(--x-max); margin-inline: auto; padding-inline: var(--x-pad); }
+      .x-gold { color: var(--x-gold-1); }
+
+      /* buttons */
+      .x-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 48px; padding: 8px 26px; border-radius: 999px;
+        font: inherit; font-weight: 900; font-size: 16px; line-height: 1.4; text-decoration: none; white-space: nowrap;
+        color: #2a1700; background-color: #f5a815; background-image: linear-gradient(180deg, var(--x-gold-1), var(--x-gold-2));
+        box-shadow: 0 5px 0 var(--x-gold-shadow), 0 12px 24px rgba(224, 138, 0, 0.35);
+        border: 0; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .x-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--x-gold-shadow), 0 16px 28px rgba(224, 138, 0, 0.4); }
+      .x-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--x-gold-shadow), 0 6px 12px rgba(224, 138, 0, 0.3); }
+      .x-btn--ghost { color: var(--x-ink); background: #1b2c8f; border: 1.5px solid var(--x-line); box-shadow: 0 10px 24px rgba(2, 8, 50, 0.35); }
+      .x-btn--ghost:hover { box-shadow: 0 14px 28px rgba(2, 8, 50, 0.45); }
+      .x-btn--ghost:active { box-shadow: 0 6px 12px rgba(2, 8, 50, 0.3); }
+      .x-btn--sm { min-height: 44px; padding: 6px 18px; font-size: 14px; }
+
+      /* header */
+      .x-head { position: sticky; top: 0; z-index: 20; background: rgba(7, 17, 74, 0.82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1.5px solid rgba(150, 180, 255, 0.25); }
+      .x-head__in { display: flex; align-items: center; gap: 16px; min-height: 68px; }
+      .x-brand { display: flex; align-items: center; gap: 12px; min-height: 44px; min-width: 44px; text-decoration: none; color: var(--x-ink); min-width: 0; }
+      .x-brand img { height: 40px; width: auto; flex: none; }
+      .x-brand span { font-weight: 900; font-size: 15px; line-height: 1.4; }
+      .x-menu { display: flex; gap: 4px; margin-inline-start: auto; }
+      .x-menu a { color: var(--x-ink-2); text-decoration: none; font-weight: 700; font-size: 14px; padding: 10px 12px; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center; }
+      .x-menu a:hover { color: var(--x-ink); background: rgba(255, 255, 255, 0.08); }
+      @media (max-width: 860px) {
+        .x-head__in { flex-wrap: wrap; gap: 0 12px; padding-block: 8px 0; }
+        .x-brand span { display: none; }
+        .x-head .x-btn { margin-inline-start: auto; }
+        .x-menu { order: 3; width: 100%; margin: 0; justify-content: space-between; border-top: 1px solid rgba(150, 180, 255, 0.18); margin-top: 8px; }
+        .x-menu a { padding-inline: 8px; font-size: 13px; }
+      }
+
+      /* hero */
+      .x-hero { position: relative; overflow: hidden; background: var(--x-navy) url("a_bg.png") center / cover no-repeat; }
+      .x-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7, 17, 74, 0.15) 0%, rgba(7, 17, 74, 0.55) 60%, rgba(7, 17, 74, 0.8) 100%); }
+      .x-hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 120px; background: linear-gradient(180deg, transparent, var(--x-deep)); }
+      .x-hero__in { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 24px; padding-block: 64px 96px; }
+      .x-eyebrow { display: inline-block; font-weight: 700; font-size: 14px; color: var(--x-ink-2); margin-bottom: 12px; }
+      .x-hero h1 { font-weight: 900; font-size: clamp(32px, 5.2vw, 58px); line-height: 1.35; letter-spacing: -0.01em; text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
+      .x-hero h1 .x-gold { text-shadow: none; filter: drop-shadow(0 4px 14px rgba(224, 138, 0, 0.35)); }
+      .x-hero__sub { font-weight: 700; font-size: clamp(19px, 2.4vw, 25px); margin-top: 14px; }
+      .x-hero__line { color: var(--x-ink-2); font-size: 16px; margin-top: 10px; max-width: 34em; }
+      .x-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+      .x-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; padding: 0; list-style: none; }
+      .x-chips li { font-size: 13px; font-weight: 700; line-height: 1.4; padding: 7px 14px; border-radius: 999px; background: #15257f; color: var(--x-ink); border: 1.5px solid var(--x-line); display: inline-flex; align-items: center; gap: 6px; }
+      .x-chips li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--x-gold-1); }
+      .x-art { position: relative; aspect-ratio: 1 / 0.9; }
+      .x-art img { position: absolute; filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.45)); }
+      .x-art__cart { width: 76%; inset-inline-start: 12%; top: 6%; }
+      .x-art__wallet { width: 34%; inset-inline-end: 0; bottom: 4%; }
+      .x-art__gift { width: 30%; inset-inline-start: 0; top: 0; }
+      @media (max-width: 860px) {
+        .x-hero__in { grid-template-columns: 1fr; padding-block: 40px 72px; text-align: center; }
+        .x-actions, .x-chips { justify-content: center; }
+        .x-hero__line { margin-inline: auto; }
+        .x-art { max-width: 420px; width: 100%; margin-inline: auto; order: -1; }
+      }
+      @media (max-width: 420px) { .x-actions .x-btn { flex: 1 1 100%; } }
+
+      /* float motion */
+      @keyframes x-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+      .x-float { animation: x-float 6s ease-in-out infinite; }
+      .x-float--2 { animation-duration: 5s; animation-delay: -1.5s; }
+      .x-float--3 { animation-duration: 7s; animation-delay: -3s; }
+      @media (prefers-reduced-motion: reduce) {
+        .x-float { animation: none; }
+        .x-btn, .x-shot { transition: none; }
+        html { scroll-behavior: auto; }
+      }
+
+      /* sections */
+      .x-sec { padding-block: clamp(56px, 8vw, 96px); scroll-margin-top: 90px; }
+      .x-sec__head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+      .x-ribbon { display: inline-block; font-weight: 900; font-size: 13px; line-height: 1.4; color: #2a1700; background-color: #f5a815; background-image: linear-gradient(180deg, var(--x-gold-1), var(--x-gold-2)); box-shadow: 0 3px 0 var(--x-gold-shadow); padding: 6px 16px; border-radius: 999px; margin-bottom: 14px; }
+      .x-sec h2 { font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.45; }
+      .x-sec__sub { color: var(--x-ink-2); margin-top: 8px; }
+
+      .x-glass { background-color: #172a99; background-image: var(--x-glass); color: var(--x-ink); border: 1.5px solid var(--x-line); border-radius: 24px; box-shadow: var(--x-shadow); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+
+      /* features */
+      .x-feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+      .x-feat { padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+      .x-feat__icon { width: 104px; height: 104px; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.4)); margin-bottom: 4px; }
+      .x-feat h3 { font-weight: 900; font-size: 19px; line-height: 1.5; }
+      .x-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+      .x-checks li { position: relative; padding-inline-start: 32px; color: var(--x-ink-2); font-size: 15px; line-height: 1.8; }
+      .x-checks li::before {
+        content: ""; position: absolute; inset-inline-start: 0; top: 4px; width: 22px; height: 22px; border-radius: 50%;
+        background: var(--x-green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
+        box-shadow: 0 3px 8px rgba(34, 197, 94, 0.4);
+      }
+      @media (max-width: 1000px) { .x-feats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 640px) { .x-feats { grid-template-columns: 1fr; } }
+
+      /* gallery */
+      .x-gallery { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; }
+      .x-shot { grid-column: span 2; margin: 0; padding: 10px; display: flex; flex-direction: column; text-align: start; font: inherit; color: inherit; cursor: zoom-in; transition: transform 0.2s ease; }
+      .x-shot:nth-child(-n + 2) { grid-column: span 3; }
+      .x-shot:hover { transform: translateY(-4px); }
+      .x-shot img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 16px; background: var(--x-deep); }
+      .x-shot span { display: block; font-weight: 700; font-size: 15px; padding: 10px 6px 2px; }
+      @media (max-width: 860px) { .x-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } .x-shot, .x-shot:nth-child(-n + 2) { grid-column: span 1; } .x-shot:first-child { grid-column: span 2; } }
+      @media (max-width: 520px) { .x-gallery { grid-template-columns: 1fr; } .x-shot, .x-shot:nth-child(-n + 2), .x-shot:first-child { grid-column: span 1; } }
+
+      .x-lb { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; margin: 0; }
+      .x-lb::backdrop { background: rgba(4, 10, 45, 0.88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+      .x-lb__in { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 64px 16px 24px; }
+      .x-lb__stage { max-width: min(1200px, 100%); }
+      .x-lb__stage img { max-width: 100%; max-height: calc(100vh - 170px); width: auto; height: auto; border-radius: 16px; border: 1.5px solid var(--x-line); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); margin-inline: auto; }
+      .x-lb__cap { color: var(--x-ink); font-weight: 700; text-align: center; }
+      .x-lb__btn { position: absolute; width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--x-line); background: rgba(32, 54, 201, 0.7); color: #fff; font: inherit; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+      .x-lb__close { top: 12px; inset-inline-end: 12px; }
+      .x-lb__prev { inset-inline-start: 12px; top: 50%; transform: translateY(-50%); }
+      .x-lb__next { inset-inline-end: 12px; top: 50%; transform: translateY(-50%); }
+      @media (max-width: 640px) { .x-lb__prev, .x-lb__next { top: auto; bottom: 16px; transform: none; } .x-lb__in { padding-bottom: 80px; } }
+
+      /* steps */
+      .x-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; counter-reset: s; list-style: none; margin: 0; padding: 0; }
+      .x-step { padding: 28px 24px; position: relative; }
+      .x-step__num { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; font-weight: 900; font-size: 26px; color: #2a1700; background-color: #f5a815; background-image: linear-gradient(180deg, var(--x-gold-1), var(--x-gold-2)); box-shadow: 0 4px 0 var(--x-gold-shadow); margin-bottom: 16px; }
+      .x-step p { font-size: 17px; font-weight: 700; line-height: 1.9; }
+      @media (max-width: 860px) { .x-steps { grid-template-columns: 1fr; } }
+
+      /* requirements */
+      .x-req { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 22px; }
+      .x-req > div { padding: 28px 24px; }
+      .x-req h3 { font-weight: 900; font-size: 20px; margin-bottom: 16px; }
+      .x-req .x-checks li { color: var(--x-ink); }
+      .x-ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+      @media (max-width: 860px) { .x-req { grid-template-columns: 1fr; } }
+
+      /* faq */
+      .x-faq { max-width: 860px; margin-inline: auto; display: grid; gap: 14px; }
+      .x-faq details { border-radius: 20px; }
+      .x-faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; min-height: 60px; font-weight: 700; font-size: 17px; line-height: 1.7; }
+      .x-faq summary::-webkit-details-marker { display: none; }
+      .x-faq summary::after { content: "+"; flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #2a1700; background-color: #f5a815; background-image: linear-gradient(180deg, var(--x-gold-1), var(--x-gold-2)); }
+      .x-faq details[open] summary::after { content: "−"; }
+      .x-faq details p { padding: 0 22px 20px; color: var(--x-ink-2); }
+
+      /* cta */
+      .x-cta { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 32px; padding: 36px clamp(24px, 5vw, 56px); background: linear-gradient(120deg, var(--x-royal), var(--x-navy)); overflow: hidden; }
+      .x-cta img { width: clamp(150px, 20vw, 230px); filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.45)); }
+      .x-cta h2 { margin-bottom: 18px; }
+      @media (max-width: 640px) { .x-cta { grid-template-columns: 1fr; text-align: center; justify-items: center; gap: 12px; } }
+
+      /* footer */
+      .x-foot { border-top: 1.5px solid rgba(150, 180, 255, 0.2); padding-block: 32px 40px; margin-top: 24px; }
+      .x-foot__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; color: var(--x-ink-2); font-size: 14px; }
+      .x-foot img { height: 44px; width: auto; }
+    </style>
+  </head>
+  <body class="x-body">
+    <div id="top">
+      <header class="x-head">
+        <div class="x-wrap x-head__in">
+          <a class="x-brand" href="#top">
+            <img src="zlogo-light.svg" alt="ژاکت" width="56" height="40" />
+            <span>سبد خرید و کش‌بک هوشمند</span>
+          </a>
+          <nav class="x-menu" aria-label="بخش‌های صفحه">
+            <a href="#features">امکانات</a>
+            <a href="#gallery">تصاویر</a>
+            <a href="#faq">سوالات متداول</a>
+          </nav>
+          <a class="x-btn x-btn--sm" href="https://www.zhaket.com" target="_blank" rel="noopener">خرید از ژاکت</a>
+        </div>
+      </header>
+
+      <main>
+        <section class="x-hero">
+          <div class="x-wrap x-hero__in">
+            <div>
+              <p class="x-eyebrow">دستیار هوشمند سبد خرید و کش‌بک زمان‌دار ووکامرس</p>
+              <h1>کش‌بک <span class="x-gold">زمان‌دار</span> و سبد خرید هوشمند</h1>
+              <p class="x-hero__sub">مشتری برمی‌گردد، فروش بیشتر می‌شود.</p>
+              <p class="x-hero__line">کشوی سبد خرید بدون رفرش، نوار ارسال رایگان، محصول مکمل و کیف پول کش‌بک برای ووکامرس.</p>
+              <div class="x-actions">
+                <a class="x-btn" href="https://www.zhaket.com" target="_blank" rel="noopener">خرید از ژاکت</a>
+                <a class="x-btn x-btn--ghost" href="#gallery">دیدن تصاویر</a>
+              </div>
+              <ul class="x-chips">
+                <li>نسخه <span class="x-ltr">1.1.0</span></li>
+                <li>راست‌چین و موبایل</li>
+                <li>سازگار با HPOS</li>
+              </ul>
+            </div>
+            <div class="x-art" aria-hidden="true">
+              <img class="x-art__cart x-float" src="a_cart-c.png" alt="" />
+              <img class="x-art__gift x-float x-float--2" src="a_gift-c.png" alt="" />
+              <img class="x-art__wallet x-float x-float--3" src="a_wallet-c.png" alt="" />
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec" id="features">
+          <div class="x-wrap">
+            <div class="x-sec__head">
+              <span class="x-ribbon">امکانات کلیدی</span>
+              <h2>هر چیزی که برای <span class="x-gold">برگشتن مشتری</span> لازم است</h2>
+            </div>
+            <div class="x-feats">
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_cart-c.png" alt="" loading="lazy" />
+                <h3>کشوی سبد خرید بدون رفرش</h3>
+                <ul class="x-checks">
+                  <li>تغییر تعداد و حذف کالا</li>
+                  <li>جمع کل در لحظه</li>
+                </ul>
+              </article>
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_ship-c.png" alt="" loading="lazy" />
+                <h3>نوار پیشرفت ارسال رایگان</h3>
+                <ul class="x-checks">
+                  <li>حداقل مبلغ از روش «ارسال رایگان» خود ووکامرس خوانده می‌شود</li>
+                  <li>اگر تعریف نشده باشد، پیام نادرست نشان داده نمی‌شود</li>
+                </ul>
+              </article>
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_wallet-c.png" alt="" loading="lazy" />
+                <h3>کیف پول کش‌بک زمان‌دار</h3>
+                <ul class="x-checks">
+                  <li>درصد و مهلت اعتبار قابل تنظیم</li>
+                  <li>مصرف خودکار در خرید بعدی</li>
+                  <li>سقف سهم کیف پول از هر سفارش</li>
+                </ul>
+              </article>
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_gift-c.png" alt="" loading="lazy" />
+                <h3>هدیه همین خرید</h3>
+                <ul class="x-checks">
+                  <li>مبلغ کش‌بکی که پیش از پرداخت نشان داده می‌شود، با مبلغ ثبت‌شده پس از تکمیل سفارش برابر است</li>
+                </ul>
+              </article>
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_shield-c.png" alt="" loading="lazy" />
+                <h3>مرجوعی دقیق</h3>
+                <ul class="x-checks">
+                  <li>برگشت اعتبار مصرف‌شده</li>
+                  <li>ابطال کش‌بک به نسبت کالاهای مرجوعی</li>
+                </ul>
+              </article>
+              <article class="x-feat x-glass">
+                <img class="x-feat__icon" src="a_gear-c.png" alt="" loading="lazy" />
+                <h3>پنل تنظیمات فارسی</h3>
+                <ul class="x-checks">
+                  <li>یادآوری سبد رهاشده با وب‌هوک HTTPS، فقط با رضایت صریح مشتری</li>
+                  <li>ابزار حریم خصوصی وردپرس</li>
+                  <li>حذف داده‌ها به انتخاب مدیر</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec" id="gallery">
+          <div class="x-wrap">
+            <div class="x-sec__head">
+              <span class="x-ribbon">تصاویر</span>
+              <h2>تصاویر <span class="x-gold">واقعی</span> از افزونه</h2>
+              <p class="x-sec__sub">برای دیدن در اندازه بزرگ‌تر، روی هر تصویر بزنید.</p>
+            </div>
+            <div class="x-gallery">
+              <button class="x-shot x-glass" type="button"><img src="gallery-01-smart-cart-1200x800.jpg" alt="کشوی سبد خرید" width="1200" height="800" loading="lazy" /><span>کشوی سبد خرید</span></button>
+              <button class="x-shot x-glass" type="button"><img src="gallery-02-mobile-1200x800.jpg" alt="نمای موبایل" width="1200" height="800" loading="lazy" /><span>موبایل</span></button>
+              <button class="x-shot x-glass" type="button"><img src="gallery-03-cashback-checkout-1200x800.jpg" alt="کش‌بک در صفحه تسویه‌حساب" width="1200" height="800" loading="lazy" /><span>کش‌بک و تسویه‌حساب</span></button>
+              <button class="x-shot x-glass" type="button"><img src="gallery-04-wallet-history-1200x800.jpg" alt="تاریخچه کیف پول" width="1200" height="800" loading="lazy" /><span>تاریخچه کیف پول</span></button>
+              <button class="x-shot x-glass" type="button"><img src="gallery-05-admin-settings-1200x800.jpg" alt="پنل تنظیمات مدیر" width="1200" height="800" loading="lazy" /><span>پنل تنظیمات</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec" id="how">
+          <div class="x-wrap">
+            <div class="x-sec__head">
+              <span class="x-ribbon">روند کار</span>
+              <h2>در <span class="x-gold">سه قدم</span> ساده</h2>
+            </div>
+            <ol class="x-steps">
+              <li class="x-step x-glass"><span class="x-step__num">۱</span><p>مشتری خرید می‌کند و مبلغ هدیه را در کشوی سبد می‌بیند.</p></li>
+              <li class="x-step x-glass"><span class="x-step__num">۲</span><p>پس از تکمیل سفارش، کش‌بک با مهلت اعتبار به کیف پولش اضافه می‌شود.</p></li>
+              <li class="x-step x-glass"><span class="x-step__num">۳</span><p>در خرید بعدی، اعتبار خودکار کسر می‌شود.</p></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="x-sec" id="requirements">
+          <div class="x-wrap">
+            <div class="x-sec__head">
+              <span class="x-ribbon">سازگاری</span>
+              <h2>پیش‌نیازها و محیط‌های <span class="x-gold">آزموده‌شده</span></h2>
+            </div>
+            <div class="x-req">
+              <div class="x-glass">
+                <h3>پیش‌نیازها</h3>
+                <ul class="x-checks">
+                  <li>وردپرس ۶.۲+</li>
+                  <li>ووکامرس ۷.۵+</li>
+                  <li>PHP ۷.۴+</li>
+                  <li>MySQL یا MariaDB (InnoDB)</li>
+                </ul>
+              </div>
+              <div class="x-glass">
+                <h3>آزموده‌شده با</h3>
+                <ul class="x-checks">
+                  <li><span class="x-ltr">WordPress 7.1 + WooCommerce 11.3.1 + PHP 8.4</span> (MariaDB و MySQL 8.4، HPOS فعال)</li>
+                  <li><span class="x-ltr">WordPress 6.2 + WooCommerce 7.5 + PHP 7.4</span> (ذخیره‌سازی کلاسیک)</li>
+                  <li>درگاه زرین‌پال در حالت آزمایشی</li>
+                  <li>هم‌زیستی با ووکامرس فارسی، WP Super Cache، Yoast SEO، Contact Form 7، TeraWallet</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec" id="faq">
+          <div class="x-wrap">
+            <div class="x-sec__head">
+              <span class="x-ribbon">سوالات متداول</span>
+              <h2>پاسخ <span class="x-gold">پرسش‌های</span> رایج</h2>
+            </div>
+            <div class="x-faq">
+              <details class="x-glass" open>
+                <summary>آیا با تسویه‌حساب بلوکی (Checkout Blocks) کار می‌کند؟</summary>
+                <p>سبد، کش‌بک و کیف پول بله. یادآوری سبد رهاشده فقط در تسویه‌حساب کلاسیک فعال است.</p>
+              </details>
+              <details class="x-glass">
+                <summary>اگر مشتری کش‌بک را خرج کند و بعد سفارش مرجوع شود؟</summary>
+                <p>فقط مانده مصرف‌نشده آن کش‌بک ابطال می‌شود؛ مبلغ خرج‌شده از کیف پول یا سفارش بعدی کسر نمی‌شود.</p>
+              </details>
+              <details class="x-glass">
+                <summary>کیف پول برای مهمان‌ها هم هست؟</summary>
+                <p>خیر، فقط کاربران واردشده.</p>
+              </details>
+              <details class="x-glass">
+                <summary>با کش صفحه سازگار است؟</summary>
+                <p>بله؛ محتوای سبد پس از بارگذاری صفحه با سبد واقعی بازدیدکننده هماهنگ می‌شود (آزموده با WP Super Cache).</p>
+              </details>
+              <details class="x-glass">
+                <summary>تاریخ‌ها شمسی نمایش داده می‌شوند؟</summary>
+                <p>بله، وقتی افزونه ووکامرس فارسی فعال باشد.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec" id="buy">
+          <div class="x-wrap">
+            <div class="x-cta x-glass">
+              <img class="x-float" src="a_gift-c.png" alt="" loading="lazy" />
+              <div>
+                <h2>آماده‌اید مشتری‌ها را <span class="x-gold">برگردانید؟</span></h2>
+                <a class="x-btn" href="https://www.zhaket.com" target="_blank" rel="noopener">خرید از ژاکت</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="x-foot">
+        <div class="x-wrap x-foot__in">
+          <img src="zlogo-light.svg" alt="ژاکت" width="62" height="44" />
+          <p>پشتیبانی از طریق تیکت ژاکت</p>
+          <p>نسخه <span class="x-ltr">1.1.0</span> · مجوز GPLv2</p>
+        </div>
+      </footer>
+    </div>
+
+    <dialog class="x-lb" id="x-lb" aria-label="نمایش بزرگ تصویر">
+      <div class="x-lb__in">
+        <div class="x-lb__stage" id="x-lb-stage"></div>
+        <p class="x-lb__cap" id="x-lb-cap"></p>
+        <button class="x-lb__btn x-lb__close" type="button" data-lb="close" aria-label="بستن">×</button>
+        <button class="x-lb__btn x-lb__prev" type="button" data-lb="prev" aria-label="تصویر قبلی">›</button>
+        <button class="x-lb__btn x-lb__next" type="button" data-lb="next" aria-label="تصویر بعدی">‹</button>
+      </div>
+    </dialog>
+
+    <script src="hark.js"></script>
+    <script>
+      (function () {
+        var shots = Array.prototype.slice.call(document.querySelectorAll(".x-shot"));
+        var lb = document.getElementById("x-lb");
+        var stage = document.getElementById("x-lb-stage");
+        var cap = document.getElementById("x-lb-cap");
+        var index = 0;
+        if (!lb || typeof lb.showModal !== "function") return;
+        function show(i) {
+          index = (i + shots.length) % shots.length;
+          var src = shots[index].querySelector("img");
+          var big = src.cloneNode(false);
+          big.removeAttribute("loading");
+          stage.replaceChildren(big);
+          cap.textContent = shots[index].querySelector("span").textContent;
+        }
+        shots.forEach(function (btn, i) {
+          btn.addEventListener("click", function () { show(i); lb.showModal(); });
+        });
+        lb.addEventListener("click", function (e) {
+          var act = e.target.closest("[data-lb]");
+          if (act) {
+            var a = act.getAttribute("data-lb");
+            if (a === "close") lb.close();
+            else show(index + (a === "next" ? 1 : -1));
+            return;
+          }
+          if (!e.target.closest("img")) lb.close();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (!lb.open) return;
+          if (e.key === "ArrowLeft") show(index + 1);
+          if (e.key === "ArrowRight") show(index - 1);
+        });
+      })();
+    </script>
+  </body>
+</html>
