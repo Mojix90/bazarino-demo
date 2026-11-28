@@ -151,10 +151,9 @@
       .x-shot { grid-column: span 2; margin: 0; padding: 10px; display: flex; flex-direction: column; text-align: start; font: inherit; color: inherit; cursor: zoom-in; transition: transform 0.2s ease; }
       .x-shot:nth-child(-n + 2) { grid-column: span 3; }
       .x-shot:hover { transform: translateY(-4px); }
-      .x-shot img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 16px; background: var(--x-deep); }
+      .x-shot img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 16px; background: var(--x-deep); }
       .x-shot span { display: block; font-weight: 700; font-size: 15px; padding: 10px 6px 2px; }
       @media (max-width: 860px) { .x-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } .x-shot, .x-shot:nth-child(-n + 2) { grid-column: span 1; } .x-shot:first-child { grid-column: span 2; } }
-      @media (max-width: 520px) { .x-gallery { grid-template-columns: 1fr; } .x-shot, .x-shot:nth-child(-n + 2), .x-shot:first-child { grid-column: span 1; } }
 
       .x-lb { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; margin: 0; }
       .x-lb::backdrop { background: rgba(4, 10, 45, 0.88); -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -226,7 +225,7 @@
           <div class="x-wrap x-hero__in">
             <div>
               <p class="x-eyebrow">دستیار هوشمند سبد خرید و کش‌بک زمان‌دار ووکامرس</p>
-              <h1>کش‌بک <span class="x-gold">زمان‌دار</span> و سبد خرید هوشمند</h1>
+              <h1>کش‌بک <span class="x-gold">زمان‌دار</span> <span style="white-space: nowrap">و سبد خرید</span> هوشمند</h1>
               <p class="x-hero__sub">مشتری برمی‌گردد، فروش بیشتر می‌شود.</p>
               <p class="x-hero__line">کشوی سبد خرید بدون رفرش، نوار ارسال رایگان، محصول مکمل و کیف پول کش‌بک برای ووکامرس.</p>
               <div class="x-actions">
