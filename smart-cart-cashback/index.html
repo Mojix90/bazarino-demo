@@ -27,7 +27,8 @@
         --x-pad: clamp(16px, 4vw, 32px);
         color-scheme: dark;
       }
-      html { overflow-x: hidden; background-color: #0e1d78; }
+      html { overflow-x: visible; overscroll-behavior: auto; overscroll-behavior-y: auto; background-color: #0e1d78; }
+      body, body.x-body { overflow-x: clip; overscroll-behavior: auto; overscroll-behavior-y: auto; }
       main, .x-sec, .x-foot { background-color: transparent; }
       body.x-body {
         margin: 0;
@@ -38,7 +39,7 @@
         color: var(--x-ink);
         background-color: #0e1d78;
         background-image: linear-gradient(180deg, var(--x-deep) 0%, var(--x-navy) 40%, #12249a 75%, var(--x-deep) 100%);
-        overflow-x: hidden;
+        overflow-x: clip;
       }
       .x-body :focus-visible { outline: 2px solid var(--x-gold-1); outline-offset: 3px; }
       .x-wrap { max-width: var(--x-max); margin-inline: auto; padding-inline: var(--x-pad); }
@@ -73,6 +74,7 @@
         .x-head__in { flex-wrap: wrap; gap: 0 12px; padding-block: 8px 0; }
         .x-brand span { display: none; }
         .x-head .x-btn { margin-inline-start: auto; }
+        .x-head { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(7, 17, 74, 0.97); }
         .x-menu { order: 3; width: 100%; margin: 0; justify-content: space-between; border-top: 1px solid rgba(150, 180, 255, 0.18); margin-top: 8px; }
         .x-menu a { padding-inline: 8px; font-size: 13px; }
       }
@@ -106,9 +108,14 @@
 
       /* float motion */
       @keyframes x-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-      .x-float { animation: x-float 6s ease-in-out infinite; }
+      .x-float { animation: x-float 6s ease-in-out infinite; will-change: transform; }
       .x-float--2 { animation-duration: 5s; animation-delay: -1.5s; }
       .x-float--3 { animation-duration: 7s; animation-delay: -3s; }
+      @media (max-width: 860px) {
+        .x-float, .x-float--2, .x-float--3 { animation: none; will-change: auto; }
+        .x-art img.x-float, .x-cta img.x-float { filter: none; }
+        html { scroll-behavior: auto; }
+      }
       @media (prefers-reduced-motion: reduce) {
         .x-float { animation: none; }
         .x-btn, .x-shot { transition: none; }
@@ -122,7 +129,7 @@
       .x-sec h2 { font-weight: 900; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.45; }
       .x-sec__sub { color: var(--x-ink-2); margin-top: 8px; }
 
-      .x-glass { background-color: #172a99; background-image: var(--x-glass); color: var(--x-ink); border: 1.5px solid var(--x-line); border-radius: 24px; box-shadow: var(--x-shadow); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+      .x-glass { background-color: #172a99; background-image: var(--x-glass); color: var(--x-ink); border: 1.5px solid var(--x-line); border-radius: 24px; box-shadow: var(--x-shadow); -webkit-backdrop-filter: none; backdrop-filter: none; }
 
       /* features */
       .x-feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
@@ -150,7 +157,7 @@
       @media (max-width: 520px) { .x-gallery { grid-template-columns: 1fr; } .x-shot, .x-shot:nth-child(-n + 2), .x-shot:first-child { grid-column: span 1; } }
 
       .x-lb { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; margin: 0; }
-      .x-lb::backdrop { background: rgba(4, 10, 45, 0.88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+      .x-lb::backdrop { background: rgba(4, 10, 45, 0.88); -webkit-backdrop-filter: none; backdrop-filter: none; }
       .x-lb__in { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 64px 16px 24px; }
       .x-lb__stage { max-width: min(1200px, 100%); }
       .x-lb__stage img { max-width: 100%; max-height: calc(100vh - 170px); width: auto; height: auto; border-radius: 16px; border: 1.5px solid var(--x-line); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); margin-inline: auto; }
@@ -441,8 +448,13 @@
           cap.textContent = shots[index].querySelector("span").textContent;
         }
         shots.forEach(function (btn, i) {
-          btn.addEventListener("click", function () { show(i); lb.showModal(); });
+          btn.addEventListener("click", function () {
+            show(i);
+            document.documentElement.style.overflow = "hidden";
+            lb.showModal();
+          });
         });
+        lb.addEventListener("close", function () { document.documentElement.style.overflow = ""; });
         lb.addEventListener("click", function (e) {
           var act = e.target.closest("[data-lb]");
           if (act) {
